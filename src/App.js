@@ -1,3 +1,4 @@
+import { useState } from "react";
 // This array with a few objects.
 // Each objects describes one item to be packed
 const initialItems = [
@@ -21,13 +22,22 @@ function Logo() {
 }
 
 function Form() {
+  const [description, setDescription] = useState("");
+  const [select, setSelect] = useState(1);
   function handleSubit(e) {
     e.preventDefault();
+    if (!description) return;
+    const newItem = { description, select, packed: false, id: Date.now() };
+    setDescription("");
+    setSelect(1);
   }
   return (
     <form className="add-form" onSubmit={handleSubit}>
       <h3>What do you need for your 😍 trip?</h3>
-      <select>
+      <select
+        value={select}
+        onChange={(e) => setSelect(Number(e.target.value))}
+      >
         {/* current value abd index. index(0) + 1 = 1 */}
         {Array.from({ length: 20 }, (_, i) => i + 1).map((num) => (
           <option value={num} key={num}>
@@ -35,7 +45,12 @@ function Form() {
           </option>
         ))}
       </select>
-      <input type="text" placeholder="Item..." />
+      <input
+        type="text"
+        placeholder="Item..."
+        value={description}
+        onChange={(e) => setDescription(e.target.value)}
+      />
       <button>Add</button>
     </form>
   );
